@@ -6,7 +6,7 @@ import java.util.Random;
 // Chromosome size: 25
 //
 
-public class GeneticAlgorithm {
+public class GeneticAlgorithm implements RouletteWheelSelection{
     private final int popSize;
     private final int chromSize;
     private ArrayList<String> board;
@@ -55,11 +55,9 @@ public class GeneticAlgorithm {
         }
     }
 
-    public void selectParents(){
-        
-        for (int i = 0; i < this.popSize; i++) {
-
-        }
+    public void initializeSelection(){
+        ArrayList<Chromosome> listOfParents = new ArrayList<>();
+        chooseParents();
     }
     
     public void printInfoWithFitness(int idx){
@@ -77,6 +75,15 @@ public class GeneticAlgorithm {
                 System.out.print(this.population.getChromosome(i).getAlele(j));
             }
             System.out.println();
+        }
+    }
+
+    @Override
+    public void chooseParents() {
+        //pilih 40 parents untuk proses mating dalam roulette wheel selection
+        int totalFitness = 0;
+        for (int i = 0; i < this.population.getPopSize(); i++) {
+            totalFitness += this.population.getChromosome(i).getFitnessScore();
         }
     }
 }
