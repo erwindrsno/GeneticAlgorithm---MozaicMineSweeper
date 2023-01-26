@@ -15,6 +15,7 @@ public class Main {
         File inputFile = new File("D://MozaicMineSweeper/src/Input.txt");
         ArrayList<String> board = new ArrayList<>();
         ArrayList<Integer> listTarget = new ArrayList<>();
+
         try {
             Scanner sc = new Scanner(inputFile);
             while(sc.hasNextLine()){
@@ -77,8 +78,9 @@ public class Main {
         }
 
         //inisialisasi kelas algoritma genetik
-        GeneticAlgorithm processor = new GeneticAlgorithm(board, 80, 25, global);
+        GeneticAlgorithm processor = new GeneticAlgorithm(board, 80, board.size(), global);
         processor.createInitialPopulation();
         processor.calculateFitness();
+        processor.chooseParents();
     }
 }
