@@ -123,7 +123,7 @@ public class Main {
         //method dibawah ini berfungsi untuk membuang residu list agar dapat repopulate lagi.
         processor.clearAllUnnecessaryLists();
 
-        //program akan looping lagi hingga menemukan sebuah chromosome dengan fitness scorenya 100 (alias global maksimum).
+//        program akan looping lagi hingga menemukan sebuah chromosome dengan fitness scorenya 100 (alias global maksimum).
         while(!processor.checkGlobalMax()){
             processor.calculateFitness();
             processor.initializeSelection();
