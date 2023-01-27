@@ -81,6 +81,7 @@ public class Main {
         GeneticAlgorithm processor = new GeneticAlgorithm(board, 80, board.size(), global);
         processor.createInitialPopulation();
         processor.calculateFitness();
-        processor.addParentsToWheel();
+        processor.initializeSelection();
+        processor.crossOver();
     }
 }

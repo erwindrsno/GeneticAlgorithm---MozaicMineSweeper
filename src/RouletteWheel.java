@@ -96,6 +96,9 @@ public class RouletteWheel {
             Chromosome c2 = this.listOfParents.get(p2);
             Chromosome[] arrChromosome = {c1,c2};
 
+            this.listOfParents.remove(p1);
+            this.listOfParents.remove(p2);
+
             this.listOfPairs.add(arrChromosome);
         }
     }

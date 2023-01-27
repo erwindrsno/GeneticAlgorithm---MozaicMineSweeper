@@ -14,6 +14,7 @@ public class GeneticAlgorithm{
     private RandomGenerator randGenerator;
     private Chromosome global;
     private ArrayList<Chromosome[]> listOfPairs;
+    private ArrayList<Chromosome> listOfOffspring;
 
     public GeneticAlgorithm(ArrayList<String> board, int popSize, int chromSize, Chromosome global){
         this.board = board;
@@ -21,6 +22,7 @@ public class GeneticAlgorithm{
         this.chromSize = chromSize;
         this.population = new Population(this.popSize, this.chromSize);
         this.global = global;
+        this.listOfOffspring = new ArrayList<>();
         //atur seed secara langsung (hardcode) pada argument
         this.randGenerator = new RandomGenerator(100);
     }
@@ -80,5 +82,58 @@ public class GeneticAlgorithm{
         wheelSelection.pairingParents();
 
         this.listOfPairs = wheelSelection.getListOfPairs();
+    }
+
+    public void crossOver(){
+        for (int i = 0; i < this.listOfPairs.size(); i++) {
+            Chromosome c1 = this.listOfPairs.get(i)[0];
+            Chromosome c2 = this.listOfPairs.get(i)[1];
+
+            String strC1 = "";
+            String strC2 = "";
+
+            for (int j = 0; j < c1.getChromSize(); j++) {
+                strC1 += c1.getAlele(j);
+                strC2 += c2.getAlele(j);
+            }
+
+            //single point crossover
+            int choose = this.randGenerator.getBoundedRand(2);
+
+            String portionC1 = "";
+            String portionC2 = "";
+
+            if(choose == 1){
+                portionC1 += strC1.substring(0,strC1.length()/2);
+                portionC2 += strC2.substring(strC2.length()/2);
+            }
+            else{
+                portionC1 += strC1.substring(strC1.length()/2);
+                portionC2 += strC2.substring(0,strC2.length()/2);
+            }
+
+            String newChromosomeStr = portionC1+portionC2;
+
+            Chromosome offspring = new Chromosome(this.chromSize);
+            for (int j = 0; j < newChromosomeStr.length(); j++) {
+                int alele = Integer.parseInt(newChromosomeStr.charAt(j)+"");
+                offspring.addAleleToChromosome(alele);
+            }
+
+            this.listOfOffspring.add(offspring);
+        }
+    }
+
+    public void printPairsInfo(){
+        for (int i = 0; i < this.listOfPairs.size(); i++) {
+            for (int j = 0; j < listOfPairs.get(i).length; j++) {
+                Chromosome c = this.listOfPairs.get(i)[j];
+                for (int k = 0; k < c.getChromSize(); k++) {
+                    System.out.print(c.getAlele(k));
+                }
+                System.out.print(" ");
+            }
+            System.out.println();
+        }
     }
 }
