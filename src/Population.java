@@ -26,4 +26,12 @@ public class Population {
     public int getChromSize(){
         return this.chromSize;
     }
+
+    public ArrayList<Chromosome> getArrOfChromosome(){
+        return this.arrOfChromosome;
+    }
+
+    public void setNewChromosome(Chromosome c, int idx){
+        arrOfChromosome.set(idx,c);
+    }
 }

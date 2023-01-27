@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Chromosome {
+public class Chromosome{
     private ArrayList<Integer> arrayListOfAlele;
     private int chromSize;
     private double score;
@@ -28,5 +28,15 @@ public class Chromosome {
 
     public void setScore(double score){
         this.score = score;
+    }
+
+    public void flipAlele(int idx){
+        int alele = this.arrayListOfAlele.get(idx);
+        if(alele == 0){
+            this.arrayListOfAlele.set(idx,1);
+        }
+        else{
+            this.arrayListOfAlele.set(idx,0);
+        }
     }
 }

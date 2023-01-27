@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 //Komponen
@@ -15,6 +16,9 @@ public class GeneticAlgorithm{
     private Chromosome global;
     private ArrayList<Chromosome[]> listOfPairs;
     private ArrayList<Chromosome> listOfOffspring;
+    private int generation;
+    //atur mutation rate secara langsung (hardcode) pada line 19
+    private final double mutationRate = 1.0;
 
     public GeneticAlgorithm(ArrayList<String> board, int popSize, int chromSize, Chromosome global){
         this.board = board;
@@ -23,7 +27,8 @@ public class GeneticAlgorithm{
         this.population = new Population(this.popSize, this.chromSize);
         this.global = global;
         this.listOfOffspring = new ArrayList<>();
-        //atur seed secara langsung (hardcode) pada argument
+        this.generation = 1;
+        //atur seed secara langsung (hardcode) pada argument di line 29
         this.randGenerator = new RandomGenerator(100);
     }
 
@@ -122,6 +127,32 @@ public class GeneticAlgorithm{
 
             this.listOfOffspring.add(offspring);
         }
+    }
+
+    public void mutation(){
+        for (int i = 0; i < this.listOfOffspring.size(); i++) {
+            if(this.randGenerator.getDoubleBoundedRand(100) <= this.mutationRate){
+                //flip random index pada chromosome ke-i
+                int randIdx = this.randGenerator.getBoundedRand(this.chromSize);
+                this.listOfOffspring.get(i).flipAlele(randIdx);
+            }
+        }
+    }
+
+    public void replacePopulation(){
+        int idx = 0;
+        while(idx < this.listOfOffspring.size()){
+            for (int i = 0; i < this.popSize; i++) {
+                Chromosome c1 = this.population.getChromosome(i);
+                Chromosome c2 = this.listOfOffspring.get(idx);
+                if(c1.getFitnessScore() < c2.getFitnessScore()){
+                    this.population.setNewChromosome(c2,i);
+                }
+            }
+            idx++;
+        }
+        this.generation++;
+        this.listOfOffspring.clear();
     }
 
     public void printPairsInfo(){

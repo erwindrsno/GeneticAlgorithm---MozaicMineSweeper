@@ -16,4 +16,8 @@ public class RandomGenerator {
     public int getBoundedRand(int bound){
         return this.random.nextInt(bound);
     }
+
+    public double getDoubleBoundedRand(int bound){
+        return this.random.nextDouble(bound);
+    }
 }

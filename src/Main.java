@@ -83,5 +83,7 @@ public class Main {
         processor.calculateFitness();
         processor.initializeSelection();
         processor.crossOver();
+        processor.mutation();
+        processor.replacePopulation();
     }
 }
