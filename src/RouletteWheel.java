@@ -18,10 +18,6 @@ public class RouletteWheel {
         this.randGenerator = randGenerator;
 
         this.listOfPairs = new ArrayList<>();
-//        for (int i = 0; i < this.totalMating/2; i++) {
-//            Chromosome[] pairs = new Chromosome[2];
-//            this.listOfPairs.add(pairs);
-//        }
     }
 
     public void addParentsToWheel() {
@@ -96,8 +92,8 @@ public class RouletteWheel {
             Chromosome c2 = this.listOfParents.get(p2);
             Chromosome[] arrChromosome = {c1,c2};
 
-            this.listOfParents.remove(p1);
-            this.listOfParents.remove(p2);
+            this.listOfParents.remove(c1);
+            this.listOfParents.remove(c2);
 
             this.listOfPairs.add(arrChromosome);
         }
@@ -105,5 +101,10 @@ public class RouletteWheel {
 
     public ArrayList<Chromosome[]> getListOfPairs(){
         return this.listOfPairs;
+    }
+
+    public void clearLists(){
+        this.listOfParents.clear();
+        this.listOfPairs.clear();
     }
 }

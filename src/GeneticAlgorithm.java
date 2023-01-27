@@ -17,6 +17,7 @@ public class GeneticAlgorithm{
     private ArrayList<Chromosome[]> listOfPairs;
     private ArrayList<Chromosome> listOfOffspring;
     private int generation;
+    private RouletteWheel wheelSelection;
     //atur mutation rate secara langsung (hardcode) pada line 19
     private final double mutationRate = 1.0;
 
@@ -30,6 +31,7 @@ public class GeneticAlgorithm{
         this.generation = 1;
         //atur seed secara langsung (hardcode) pada argument di line 29
         this.randGenerator = new RandomGenerator(100);
+        this.wheelSelection = new RouletteWheel(this.popSize,this.population,this.randGenerator);
     }
 
     public void createInitialPopulation(){
@@ -41,11 +43,11 @@ public class GeneticAlgorithm{
             }
             this.population.addChromosome(i,chromosome);
         }
-//        printInfo();
     }
 
     public void calculateFitness(){
         int idx = 0;
+        System.out.println("\n===GENERASI KE-"+this.generation+"===");
         while(idx < this.popSize){
             Chromosome c = this.population.getChromosome(idx);
 
@@ -71,22 +73,11 @@ public class GeneticAlgorithm{
         System.out.print(", fitness score : " + c.getFitnessScore() + "\n");
     }
 
-    public void printInfo(){
-        for (int i = 0; i < this.population.getPopSize(); i++) {
-            System.out.print("Populasi ke - " + (i+1) + " : ");
-            for (int j = 0; j < this.population.getChromSize(); j++) {
-                System.out.print(this.population.getChromosome(i).getAlele(j));
-            }
-            System.out.println();
-        }
-    }
-
     public void initializeSelection(){
-        RouletteWheel wheelSelection = new RouletteWheel(this.popSize,this.population,this.randGenerator);
-        wheelSelection.addParentsToWheel();
-        wheelSelection.pairingParents();
+        this.wheelSelection.addParentsToWheel();
+        this.wheelSelection.pairingParents();
 
-        this.listOfPairs = wheelSelection.getListOfPairs();
+        this.listOfPairs = this.wheelSelection.getListOfPairs();
     }
 
     public void crossOver(){
@@ -152,19 +143,38 @@ public class GeneticAlgorithm{
             idx++;
         }
         this.generation++;
-        this.listOfOffspring.clear();
     }
 
-    public void printPairsInfo(){
-        for (int i = 0; i < this.listOfPairs.size(); i++) {
-            for (int j = 0; j < listOfPairs.get(i).length; j++) {
-                Chromosome c = this.listOfPairs.get(i)[j];
-                for (int k = 0; k < c.getChromSize(); k++) {
-                    System.out.print(c.getAlele(k));
-                }
-                System.out.print(" ");
+    public void clearAllUnnecessaryLists(){
+        this.listOfPairs.clear();
+        this.listOfOffspring.clear();
+        this.wheelSelection.clearLists();
+    }
+
+    public boolean checkGlobalMax(){
+        for (int i = 0; i < this.popSize; i++) {
+            Chromosome c = this.population.getChromosome(i);
+            if(c.getFitnessScore() == 100){
+                return true;
             }
-            System.out.println();
         }
+        return false;
+    }
+
+//    public void printPairsInfo(){
+//        for (int i = 0; i < this.listOfPairs.size(); i++) {
+//            for (int j = 0; j < listOfPairs.get(i).length; j++) {
+//                Chromosome c = this.listOfPairs.get(i)[j];
+//                for (int k = 0; k < c.getChromSize(); k++) {
+//                    System.out.print(c.getAlele(k));
+//                }
+//                System.out.print(" ");
+//            }
+//            System.out.println();
+//        }
+//    }
+
+    public int getGeneration(){
+        return this.generation;
     }
 }
