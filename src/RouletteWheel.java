@@ -1,5 +1,13 @@
 import java.util.ArrayList;
 
+// Konsep roulette wheel:
+// roulette wheel akan dibuat dalam bentuk arraylist dengan panjang total fitness score dari popoulasi.
+// contoh: jika pada c1 memiliki fitness bernilai 3, c2 bernilai 5, c3 bernilai 2 dan panjang roulette wheel ada 10,
+// maka roulette wheel menjadi: c1 c1 c1 c2 c2 c2 c2 c2 c3 c3.
+// roulette wheel hanya memiliki 1 fixed point
+
+
+
 public class RouletteWheel {
     private ArrayList<Chromosome> listOfParents;
     private ArrayList<Chromosome> rouletteWheel;
@@ -30,7 +38,7 @@ public class RouletteWheel {
             totalFitness += (int)this.population.getChromosome(i).getFitnessScore();
         }
 
-        //assign calon parents ke dalam roulette wheel untuk pemilihan
+        //assign calon parents ke dalam roulette wheel untuk pemilihan (penjelasan terdapat di atas program)
         int iterationIdx = 1;
         int chromosomeIdx = 0;
         for (int i = 0; i < totalFitness; i++) {
@@ -46,6 +54,7 @@ public class RouletteWheel {
         }
 
         int idxParents = 0;
+        //proses pemilihan parents dengan cara memutarkan roulette wheel
         while(idxParents < this.totalMating){
             int randomNum = this.randGenerator.getBoundedRand(totalFitness);
             Chromosome c = rouletteWheel.get(randomNum);
@@ -80,29 +89,38 @@ public class RouletteWheel {
         }
     }
 
+    //pemasangan parents
     public void pairingParents(){
+        //looping selama masih ada parents
         while(!this.listOfParents.isEmpty()){
+            //akan dipilih pasangan secara acak dengan bound ukuran list of parents.
             int p1 = this.randGenerator.getBoundedRand(this.listOfParents.size());
             int p2 = this.randGenerator.getBoundedRand(this.listOfParents.size());
+            //looping jika p1 = p2 untuk menghindari perkawinan tanpa pasangan
             while(p1 == p2){
                 p2 = this.randGenerator.getBoundedRand(this.listOfParents.size());
             }
 
+            //pengambilan variabel dan diassign ke dalam sebuah static array
             Chromosome c1 = this.listOfParents.get(p1);
             Chromosome c2 = this.listOfParents.get(p2);
             Chromosome[] arrChromosome = {c1,c2};
 
+            //membuang pasangan yang akan dikawinkan pada list of parents
             this.listOfParents.remove(c1);
             this.listOfParents.remove(c2);
 
+            //menambahkan pasangan ke list baru yaitu listofpairs
             this.listOfPairs.add(arrChromosome);
         }
     }
 
+    //method getter listofpairs
     public ArrayList<Chromosome[]> getListOfPairs(){
         return this.listOfPairs;
     }
 
+    //method pengosongan residu list
     public void clearLists(){
         this.listOfParents.clear();
         this.listOfPairs.clear();

@@ -8,9 +8,14 @@ import java.util.Scanner;
 //Komponen
 // Population size: 80
 // Chromosome size: 25
-//
+// Parent selection : Roulette wheel
+// Pair of parents : 40
+// Offsprings : 20
+// Replace population : dengan menggantikan semua fitness yang lebih rendah dengan yang lebih baik dari offspring
 
-// Sebelum menjalankan file, perlu mengubah file yang berisi input puzzle terlebih dahulu dengan cara mengganti filepathnya yang ada pada di line-33.
+// !!!Perlu diketahui!!!:
+// * Sebelum menjalankan file, perlu mengubah file yang berisi input puzzle terlebih dahulu dengan cara mengganti filepathnya yang ada pada di line-33.
+// * Pengaturan seed dapat dilakukan pada kelas GeneticAlgorithm.java
 
 // Format input (5x5)
 // *,*,5,*,2,
@@ -26,7 +31,8 @@ import java.util.Scanner;
 // * Mengubah program dari awalnya memiliki coupling yang sangat tinggi menjadi low coupling
 // * Mengubah program menjadi lebih mudah dibaca
 // * Mengubah cara prosedur mutasi
-// * Menyusun semua komponen menjadi sebuah kelas terpisah / OOP yang lebih rapih (pada program sebelumnya hanya bergantung pada struktur data. Hal ini menyebabkan program sulit dibaca)
+// * Menyusun semua komponen menjadi sebuah kelas terpisah / OOP yang lebih rapih (pada program sebelumnya hanya bergantung pada struktur data seutuhnya.
+// Hal ini menyebabkan program sulit dibaca)
 
 public class Main {
     public static void main(String[] args) {
@@ -63,7 +69,7 @@ public class Main {
             //pre-assign board untuk diproses dalam objek solver
             for (int i = 0; i < arrBoard.length; i++) {
                 for (int j = 0; j < arrBoard.length; j++) {
-                    //jika i dan j berada di luar kotak
+                    //jika iterasi berada di luar kotak
                     if(i == 0 || i == arrBoard.length-1 || j == 0 || j == arrBoard.length-1){
                         //maka diassign dengan -1
                         arrBoard[i][j] = -1;
@@ -107,7 +113,7 @@ public class Main {
 
         //inisialisasi kelas algoritma genetik
         GeneticAlgorithm processor = new GeneticAlgorithm(board, 80, board.size(), global);
-        //proses penyelesaian puzzle dengan algoritma genetik
+        //proses penyelesaian puzzle dengan algoritma genetik berdasarkan lifecycle algoritma genetik
         processor.createInitialPopulation();
         processor.calculateFitness();
         processor.initializeSelection();
@@ -116,6 +122,8 @@ public class Main {
         processor.replacePopulation();
         //method dibawah ini berfungsi untuk membuang residu list agar dapat repopulate lagi.
         processor.clearAllUnnecessaryLists();
+
+        //program akan looping lagi hingga menemukan sebuah chromosome dengan fitness scorenya 100 (alias global maksimum).
         while(!processor.checkGlobalMax()){
             processor.calculateFitness();
             processor.initializeSelection();
@@ -124,6 +132,7 @@ public class Main {
             processor.replacePopulation();
             processor.clearAllUnnecessaryLists();
         }
+        //jika global maksimum sudah ditemukan, maka program akan berhenti dan menampilkan global maksimum tersebut ditemukan pada generasi ke berapa
         if(processor.checkGlobalMax()){
             System.out.println("\nGlobal maksimum ditemukan!");
             System.out.println("Ditemukan pada generasi ke-"+processor.getGeneration());
